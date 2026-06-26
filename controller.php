@@ -1,37 +1,26 @@
 <?php
 
-function creerWalletController() : void {
-    $nom = readline("Nom : ");
-    $telephone = readline("Téléphone : ");
-    $solde = (int) readline("Solde : ");
-    $code = (int) readline("Code secret : ");
-}
+require_once "services.php";
 
-function controller($choix): void {
+function controller($choix){
+
     switch($choix){
 
         case 1:
             creerWalletController();
             break;
-
-        case 2:
-            echo "Faire Dépôt\n";
-            break;
-
-        case 3:
-            echo "Faire Retrait\n";
-            break;
-
-        case 4:
-            echo "Lister les Transactions\n";
-            break;
-
         case 0:
-            echo "Au revoir\n";
-            break;
-
-        default:
-            echo "Choix invalide\n";
+            echo "Au revoir";
             break;
     }
+
+}
+
+function creerWalletController(){
+    $wallet = [];
+    $wallet["nom"] = readline("Nom : ");
+    $wallet["telephone"] = readline("Téléphone : ");
+    $wallet["code"] = readline("Code secret : ");
+    $wallet["solde"] = readline("Solde initial : ");
+    creerWalletService($wallet);
 }

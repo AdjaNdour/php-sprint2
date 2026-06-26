@@ -1,44 +1,46 @@
 <?php
 
-    function validerNom(string $nom): bool{
-        if ($nom == "") {
-            return false;
-        }
-        return true;
+require_once "data.php";
+
+function validerNom($nom){
+    return $nom != "";
+}
+
+function validerNumero($numero):bool{
+    if(strlen($numero)!=9){
+        return false;
+    }
+    $indicateurs = ["77", "78", "76", "70", "75"];
+    $result = "";
+
+    for ($i = 0; $i < 2; $i++) {
+        $result .= $numero[$i];
     }
 
-    function validerSolde(int $solde): bool{
-        if ($solde < 0) {
+    foreach ($indicateurs as $ind) {
+        if ($result === $ind) {
             return false;
         }
-        return true;
     }
+    return true;
+}
 
-    function validerCode(int $code): bool{
-        if ($code <= 0) {
-            return false;
+function numeroExiste($numero){
+    global $wallets;
+    foreach($wallets as $wallet){
+        if($wallet["telephone"]==$numero){
+            return true;
         }
-        return true;
     }
+    return false;
+}
 
-    function validerTelephone(string $telephone): bool{
-        if (strlen($telephone) != 9) {
-            return false;
+function codeExiste($code){
+    global $wallets;
+    foreach($wallets as $wallet){
+        if($wallet["code"]==$code){
+            return true;
         }
-        return true;
     }
-
-    function telephoneExiste(string $telephone): bool{
-        if (trouverWalletParTelephone($telephone) == -1) {
-            return false;
-        }
-        return true;
-    }
-
-    function codeExiste(int $code): bool{
-        if (trouverWalletParCode($code) == -1) {
-            return false;
-        }
-        return true;
-    }
-?>
+    return false;
+}

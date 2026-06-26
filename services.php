@@ -1,40 +1,34 @@
 <?php
+
 require_once "validator.php";
+require_once "repository.php";
 
-function creerWallet(string $nom, string $telephone, int $solde, int $code): bool
-{
-    if (!validerNom($nom)) {
-        return false;
+function creerWalletService($wallet){
+    if(!validerNom($wallet["nom"])){
+        echo "Nom invalide\n";
+        return;
     }
 
-    if (!validerTelephone($telephone)) {
-        return false;
+    if(!validerNumero($wallet["telephone"])){
+        echo "Numéro invalide\n";
+        return;
     }
 
-    if (telephoneExiste($telephone)) {
-        return false;
+    if(numeroExiste($wallet["telephone"])){
+        echo "Numéro déjà existant\n";
+        return;
     }
 
-    if (!validerSolde($solde)) {
-        return false;
+    if(codeExiste($wallet["code"])){
+        echo "Code déjà utilisé\n";
+        return;
     }
 
-    if (!validerCode($code)) {
-        return false;
+    if($wallet["solde"] < 0){
+        echo "Solde invalide\n";
+        return;
     }
-
-    if (codeExiste($code)) {
-        return false;
-    }
-
-    $wallet = [
-        "client" => $nom,
-        "telephone" => $telephone,
-        "solde" => $solde,
-        "code" => $code
-    ];
 
     ajouterWallet($wallet);
 
-    return true;
 }
