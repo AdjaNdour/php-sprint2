@@ -7,7 +7,7 @@ function afficherMenu(): void {
     echo "2 - Faire Dépôt\n";
     echo "3 - Faire Retrait\n";
     echo "4 - Lister les Transactions\n";
-    echo "5 - Lister les WALLETS\n";
+    echo "5 - Lister les wallets\n";
     echo "0 - Quitter\n";
 }
 function validite($min,$max){
