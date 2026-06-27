@@ -1,6 +1,6 @@
 <?php
 
-require_once "data.php";
+require_once "repository.php";
 
 function validerNom($nom){
     return $nom != "";
@@ -19,13 +19,21 @@ function validerNumero($numero):bool{
 
     foreach ($indicateurs as $ind) {
         if ($result === $ind) {
-            return false;
+            return true;
         }
+    }
+    return false;
+}
+
+function validerCode($code):bool{
+    if(strlen($code) != 4){
+        return false;
     }
     return true;
 }
 
-function numeroExiste($numero){
+
+function numeroExiste($numero):bool{
     global $wallets;
     foreach($wallets as $wallet){
         if($wallet["telephone"]==$numero){
@@ -35,7 +43,7 @@ function numeroExiste($numero){
     return false;
 }
 
-function codeExiste($code){
+function codeExiste($code):bool{
     global $wallets;
     foreach($wallets as $wallet){
         if($wallet["code"]==$code){
@@ -44,3 +52,6 @@ function codeExiste($code){
     }
     return false;
 }
+
+
+?>
