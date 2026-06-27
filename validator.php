@@ -40,5 +40,4 @@ function codeExiste(string $codeSecret):bool{
     return in_array($codeSecret , $codes);
 }
 
-
 ?>
