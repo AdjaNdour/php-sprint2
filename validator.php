@@ -5,6 +5,15 @@ require_once "repository.php";
 
 use function Repositories\getWallets;
 
+function validite($min,$max):int{
+    do{
+        $choix = readline("Votre choix : ");
+        if(!is_numeric($choix) || $choix<$min || $choix>$max){
+            echo "Choix invalide.\n";
+        }
+    }while(!is_numeric($choix) || $choix<$min || $choix>$max);
+    return $choix;
+}
 
 function validerNom($nom):string{
     return $nom != "";

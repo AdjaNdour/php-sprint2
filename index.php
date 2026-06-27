@@ -1,10 +1,13 @@
 <?php
-use function Controllers\controller;
-
 require_once "repository.php";
 require_once "validator.php";
 require_once "services.php";
 require_once "controller.php";
+
+use function Controllers\controller;
+use function Validators\validite;
+
+
 
 function afficherMenu(): void {
     echo "\n--------------Menu Distributeur----------------\n";
@@ -15,21 +18,10 @@ function afficherMenu(): void {
     echo "5 - Lister les wallets\n";
     echo "0 - Quitter\n";
 }
-function validite($min,$max){
-    do{
-        $choix = readline("Votre choix : ");
-        if(!is_numeric($choix) || $choix<$min || $choix>$max){
-            echo "Choix invalide.\n";
-        }
-    }while(!is_numeric($choix) || $choix<$min || $choix>$max);
-    return $choix;
-}
 
 $choix = -1;
 
-
 do {
-
     afficherMenu();
     $choix = validite(0,5);
     controller($choix);
