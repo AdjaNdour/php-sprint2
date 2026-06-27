@@ -50,6 +50,24 @@ function creerWalletService($newWallet){
     ajouterWallet($newWallet);
 }
 
+function calculerFrais($montant): int{
+
+    if($montant <= 10000){
+        return 200;
+    }
+
+    if($montant <= 100000){
+        return 500;
+    }
+
+    $frais = $montant * 0.01;
+
+    if($frais > 5000){
+        $frais = 5000;
+    }
+
+    return (int)$frais;
+}
 
 function creerTransactionService(array $wallets,array $newTrans, $type):?array {
   
@@ -61,32 +79,51 @@ function creerTransactionService(array $wallets,array $newTrans, $type):?array {
         }
     } while ($index == -1); 
     
-    if (!$type) {   
+    if (!$type) { 
+
         if ($wallets[$index]['solde'] == 0) {
             echo "votre solde est nul, vous ne pouvez pas faire de retrait merci.\n";
             return null;
         }
         do {
-            if ($newTrans['montant'] <= 0 || $newTrans['montant'] > $wallets[$index]['solde']) {
-                echo "Le montant doit être strictement positif et inférieur ou égal au solde ". $wallets[$index]['solde'].".\n";
-                $newTrans['montant']= readline("ressaisir le montant : ");; 
+            $frais = calculerFrais($newTrans['montant']);
+            $total = $newTrans['montant'] + $frais;
+            if ($newTrans['montant'] <= 0 || $total > $wallets[$index]['solde']) {
+                echo "Montant invalide ou solde insuffisant.\n";
+                echo "Frais : ".$frais." CFA\n";
+                $newTrans['montant'] = (int) readline("ressaisir le montant : ");
             }
-        } while ($newTrans['montant'] <= 0 || $newTrans['montant'] > $wallets[$index]['solde']); 
+        
+        } while ($newTrans['montant'] <= 0 || ($newTrans['montant'] + calculerFrais($newTrans['montant'])) > $wallets[$index]['solde']); 
     }
 
     $newTrans['indexClient']=$index;
     return $newTrans;
 }
 
-function faireTransactionService($newTrans,$type){
-    global $wallets ;
-    $newDepotAvecIndex = creerTransactionService($wallets,$newTrans,$type);
+function faireTransactionService($newTrans, $type){
 
-    $transaction=['montant'=>0,'indexClient'=>''];
-    $transaction['indexClient'] = $newDepotAvecIndex['indexClient'];
-    $transaction['montant'] = $newDepotAvecIndex['montant'];
+    global $wallets;
+    $newDepotAvecIndex = creerTransactionService($wallets, $newTrans, $type);
+    
+    if ($newDepotAvecIndex == null) {
+        return;
+    }
+    $transaction = [
+        'montant' => $newDepotAvecIndex['montant'],
+        'indexClient' => $newDepotAvecIndex['indexClient'],
+        'frais' => 0
+    ];
+
+    if($type){
+        gererSolde($wallets, $transaction['indexClient'],$transaction['montant'],true);
+    }else{
+        $frais = calculerFrais($transaction['montant']);
+        $transaction['frais'] = $frais;
+        gererSolde($wallets, $transaction['indexClient'],$transaction['montant']+$frais,false);
+        echo "Frais appliqués : ".$frais." CFA\n";
+    }
     ajouterTransaction($transaction);
-    gererSolde($wallets, $transaction['indexClient'], $transaction['montant'],$type);
 }
 
 function afficherWalletsService():void{
