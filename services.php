@@ -90,7 +90,7 @@ function faireTransactionService($newTrans,$type){
 }
 
 function afficherWalletsService():void{
-    global $wallets, $transactions;
+    global $wallets;
 
     afficherWallets($wallets);
 }
@@ -98,7 +98,7 @@ function afficherWalletsService():void{
 function afficherTransactionsService():void{
     global $wallets, $transactions;
 
-    afficherTransactions($$wallets,$transactions);
+    afficherTransactions($wallets,$transactions);
 }
 
 ?>
