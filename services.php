@@ -1,9 +1,22 @@
 <?php
+namespace Services;
 
 require_once "validator.php";
 require_once "repository.php";
 
-function creerWalletService($newWallet){
+use function Validators\validerNumero;
+use function Validators\validerCode;
+use function Validators\numeroExiste;
+use function Validators\codeExiste;
+
+use function Repositories\ajouterWallet;
+use function Repositories\ajouterTransaction;
+use function Repositories\gererSolde;
+use function Repositories\rechercheWalletParTelephone;
+use function Repositories\afficherTransactions;
+use function Repositories\afficherWallets;
+
+function creerWalletService($newWallet):void{
    
     do {
         if ($newWallet['client']==null) {
@@ -97,7 +110,7 @@ function creerTransactionService(array $wallets,array $newTrans, $type):?array {
     return $newTrans;
 }
 
-function faireTransactionService($newTrans, $type){
+function faireTransactionService($newTrans, $type):void{
 
     global $wallets;
     $newDepotAvecIndex = creerTransactionService($wallets, $newTrans, $type);
@@ -124,13 +137,11 @@ function faireTransactionService($newTrans, $type){
 
 function afficherWalletsService():void{
     global $wallets;
-
     afficherWallets($wallets);
 }
 
 function afficherTransactionsService():void{
     global $wallets, $transactions;
-
     afficherTransactions($wallets,$transactions);
 }
 

@@ -1,6 +1,12 @@
 <?php
+namespace Controllers;
 
 require_once "services.php";
+
+use function Services\creerWalletService;
+use function Services\faireTransactionService;
+use function Services\afficherTransactionsService;
+use function Services\afficherWalletsService;
 
 
 function controller($choix){
@@ -38,7 +44,6 @@ function creerWalletController(){
     $newWallet["code"] = readline("saisir le code secret : ");
     $newWallet["solde"] = readline("saisir le solde initial : ");
     creerWalletService($newWallet);
-    echo "Wallet créé avec succès.\n";
 }
 
 function faireTransactionController($type){

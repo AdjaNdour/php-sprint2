@@ -1,4 +1,5 @@
 <?php
+namespace Repositories;
 
 $wallets=[
     0=>['client'=>'Baila Wane','telephone'=>'771001010','code'=>1234,'solde'=>0],
@@ -9,16 +10,25 @@ $transactions=[
     1=>['montant'=>-5000,'indexClient'=>0]
 ];
 
+//create
 function ajouterWallet($newWallet) : void {
     global $wallets;
-    $wallets[] = $newWallet;
+    array_push($wallets, $newWallet);
 }
+
 function ajouterTransaction($newTrans) : void {
     global $transactions;
     $transactions[] = $newTrans;
 }
 
-function afficherWallets( $wallets):void{ 
+// gets
+function getWallets(): array {
+    global $wallets;
+    return $wallets;
+}
+
+//show
+function afficherWallets($wallets):void{ 
     for($index = 0; $index < count($wallets); $index++){
        echo "| Titulaire:".$wallets[$index]['client'] ." | Telephone:" .$wallets[$index]['telephone']." | Solde:" .$wallets[$index]['solde']."\n";
     }
@@ -30,24 +40,16 @@ function afficherTransactions($wallets, $transactions):void{
         $client = $wallets[$indexClient];
         echo "| Titulaire : {$client['client']}" ."| Montant : {$transaction['montant']}\n";
     }
+
 }
 
-function rechercheWalletParTelephone(array $wallets,string $telephone):int{
-    foreach ($wallets as $index => $wallet) {
-        if ($wallet['telephone']==$telephone) {
-            return $index;
-        }
-    }
-    return -1;
+// lamda
+function rechercheWalletParTelephones(array $wallets,string $telephone):int{
+    $telephones = array_column($wallets ,'telephone');
+    $index = array_search($telephone,$telephones);
+    return $index === false ? -1 : $index;
 }
-function rechercheWalletParCode(array $wallets,string $code):int{
-    foreach ($wallets as $index => $wallet) {
-        if ($wallet['code']==$code) {
-            return $index;
-        }
-    }
-    return -1;
-}
+
 function gererSolde(array &$wallets, int $index, int $montant, bool $addition): void {
     if ($addition) {
         $wallets[$index]['solde'] += $montant;

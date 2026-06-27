@@ -1,8 +1,12 @@
 <?php
+namespace Validators;
 
 require_once "repository.php";
 
-function validerNom($nom){
+use function Repositories\getWallets;
+
+
+function validerNom($nom):string{
     return $nom != "";
 }
 
@@ -16,13 +20,7 @@ function validerNumero($numero):bool{
     for ($i = 0; $i < 2; $i++) {
         $result .= $numero[$i];
     }
-
-    foreach ($indicateurs as $ind) {
-        if ($result === $ind) {
-            return true;
-        }
-    }
-    return false;
+    return in_array($result,$indicateurs);
 }
 
 function validerCode($code):bool{
@@ -32,25 +30,14 @@ function validerCode($code):bool{
     return true;
 }
 
-
-function numeroExiste($numero):bool{
-    global $wallets;
-    foreach($wallets as $wallet){
-        if($wallet["telephone"]==$numero){
-            return true;
-        }
-    }
-    return false;
+function numeroExiste(string $numero): bool{
+    $telephones = array_column(getWallets(), "telephone");
+    return in_array($numero, $telephones);
 }
 
-function codeExiste($code):bool{
-    global $wallets;
-    foreach($wallets as $wallet){
-        if($wallet["code"]==$code){
-            return true;
-        }
-    }
-    return false;
+function codeExiste(string $codeSecret):bool{
+    $codes = array_column(getWallets(), "code");
+    return in_array($codeSecret , $codes);
 }
 
 

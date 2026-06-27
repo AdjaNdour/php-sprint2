@@ -1,4 +1,9 @@
 <?php
+use function Controllers\controller;
+
+require_once "repository.php";
+require_once "validator.php";
+require_once "services.php";
 require_once "controller.php";
 
 function afficherMenu(): void {
@@ -21,6 +26,7 @@ function validite($min,$max){
 }
 
 $choix = -1;
+
 
 do {
 
