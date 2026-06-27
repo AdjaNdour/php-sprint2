@@ -13,10 +13,10 @@ function afficherMenu(): void {
 function validite($min,$max){
     do{
         $choix = readline("Votre choix : ");
-        if(!is_numeric($choix) || $choix<$min || $choix>$max){
+        if($choix<$min || $choix>$max){
             echo "Choix invalide.\n";
         }
-    }while(!is_numeric($choix) || $choix<$min || $choix>$max);
+    }while($choix<$min || $choix>$max);
     return $choix;
 }
 
