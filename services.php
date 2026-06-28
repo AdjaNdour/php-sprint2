@@ -19,11 +19,11 @@ use function Repositories\afficherWallets;
 function creerWalletService($newWallet):void{
    
     do {
-        if ($newWallet['client']==null) {
+        if ($newWallet['client']=="") {
             echo "votre nom ne doit pas etre vide \n";
             $newWallet['client'] = readline("ressaisir un nom : \n");
         } 
-    } while ($newWallet['client']==null);
+    } while ($newWallet['client']=="");
 
     do {
         if (!validerNumero($newWallet['telephone'])) {
@@ -31,13 +31,6 @@ function creerWalletService($newWallet):void{
             $newWallet['telephone'] = readline("ressaisir un telephone : \n");
         } 
     } while (!validerNumero($newWallet['telephone']));
-
-    do {
-        if (!validerCode($newWallet['code'])) {
-            echo "Code invalide\n";
-            $newWallet['code'] = readline("ressaisir le code : ");
-        }
-    } while (!validerCode($newWallet['code']));
     
     do {
         if (numeroExiste($newWallet["telephone"])) {
@@ -47,19 +40,25 @@ function creerWalletService($newWallet):void{
     } while (numeroExiste($newWallet["telephone"]));
 
     do {
+        if (!validerCode($newWallet['code'])) {
+            echo "Code invalide\n";
+            $newWallet['code'] = readline("ressaisir le code : ");
+        }
+    } while (!validerCode($newWallet['code']));
+    
+    do {
         if (codeExiste($newWallet["code"])) {
             echo "Code deja utuliser \n";
-            $newWallet['code'] = (int) readline("ressaisir le code : ");
+            $newWallet['code'] = readline("ressaisir le code : ");
         }
     } while (codeExiste($newWallet["code"]));
 
     do {
-        if ($newWallet["solde"] < 0) {
-            echo "solde invalid\n";
-            $newWallet['solde'] = (int) readline("ressaisir le solde : ");
+        if (!ctype_digit($newWallet["solde"]) || $newWallet["solde"] < 0) {
+            echo "Solde invalide\n";
+            $newWallet["solde"] = readline("Ressaisir le solde : ");
         }
-    } while ($newWallet["solde"] < 0);
-
+    } while (!ctype_digit($newWallet["solde"]) || $newWallet["solde"] < 0);
     ajouterWallet($newWallet);
 }
 
@@ -86,7 +85,14 @@ function creerTransactionService(array $wallets,array $newTrans, $type):?array {
             echo "numero non existant veiller ressaire \n";
             $newTrans['telephone']= readline("ressaisir le telephone : ");; 
         }
-    } while ($index == -1); 
+    } while ($index == -1);
+
+    do {
+        if (!ctype_digit($newTrans["montant"]) || $newTrans["montant"] < 0) {
+            echo "montant invalide\n";
+            $newTrans["montant"] = readline("Ressaisir le montant : ");
+        }
+    } while (!ctype_digit($newTrans["montant"]) || $newTrans["montant"] < 0);
     
     if (!$type) { 
 
@@ -102,7 +108,6 @@ function creerTransactionService(array $wallets,array $newTrans, $type):?array {
                 echo "Frais : ".$frais." CFA\n";
                 $newTrans['montant'] = (int) readline("ressaisir le montant : ");
             }
-        
         } while ($newTrans['montant'] <= 0 || ($newTrans['montant'] + calculerFrais($newTrans['montant'])) > $wallets[$index]['solde']); 
     }
 
@@ -129,7 +134,9 @@ function faireTransactionService($newTrans, $type):void{
     }else{
         $frais = calculerFrais($transaction['montant']);
         $transaction['frais'] = $frais;
-        gererSolde($wallets, $transaction['indexClient'],$transaction['montant']+$frais,false);
+        $transaction['montant'] = -($transaction['montant'] + $frais);
+        $trans = -($transaction['montant']);
+        gererSolde($wallets, $transaction['indexClient'],$trans,false);
         echo "Frais appliqués : ".$frais." CFA\n";
     }
     ajouterTransaction($transaction);

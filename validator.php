@@ -32,8 +32,13 @@ function validerNumero($numero):bool{
     return in_array($result,$indicateurs);
 }
 
-function validerCode($code):bool{
-    if(strlen($code) != 4){
+function validerCode($code): bool
+{
+    if (strlen($code) != 4) {
+        return false;
+    }
+
+    if (!ctype_digit($code)) {
         return false;
     }
     return true;

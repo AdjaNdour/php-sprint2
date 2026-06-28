@@ -3,11 +3,11 @@ namespace Repositories;
 
 $wallets=[
     0=>['client'=>'Baila Wane','telephone'=>'771001010','code'=>1234,'solde'=>0],
-    1=>['client'=>'Hawa Baila Wane','telephone'=>'774799479','code'=>0000,'solde'=>100000]
+    1=>['client'=>'Hawa Baila Wane','telephone'=>'774799479','code'=>0000,'solde'=>10000]
 ];
 $transactions=[
-    0=>['montant'=>1000,'indexClient'=>0],
-    1=>['montant'=>-5000,'indexClient'=>0]
+    0=>['montant'=>1000,'frais'=>0,'indexClient'=>0],
+    1=>['montant'=>-5000,'frais'=>200,'indexClient'=>0]
 ];
 
 //create
@@ -28,14 +28,14 @@ function getWallets(): array {
 
 function afficherWallets($wallets):void{ 
     array_map(function($wallet){
-        echo "| Titulaire: {$wallet['client']} | Telephone: {$wallet['telephone']} | Solde: {$wallet['solde']}\n";
+        echo "| Titulaire: {$wallet['client']} | Telephone: {$wallet['telephone']} | Solde: {$wallet['solde']} | Code: {$wallet['code']}\n";
     },$wallets);
 }
 
 function afficherTransactions($wallets, $transactions): void{
     array_map(function($transaction) use ($wallets) {
         $client = $wallets[$transaction['indexClient']];
-        echo "| Titulaire : {$client['client']} | Montant : {$transaction['montant']}\n";
+        echo "| Titulaire : {$client['client']} | Montant : {$transaction['montant']} | Frais : {$transaction['frais']}\n";
     }, $transactions);
 }
 

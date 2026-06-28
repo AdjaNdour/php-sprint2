@@ -7,8 +7,6 @@ require_once "controller.php";
 use function Controllers\controller;
 use function Validators\validite;
 
-
-
 function afficherMenu(): void {
     echo "\n--------------Menu Distributeur----------------\n";
     echo "1 - Créer Wallet\n";
