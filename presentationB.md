@@ -64,7 +64,7 @@ Lancement du projet
 
 Depuis le terminal :
 
-php index.php
+    php index.php
 Git
 Branches utilisées
     main
